@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it and the associated paper."
+title: "CCE1 automated AR1 GAM pipeline"
+type: software
+license: MIT
+version: "1.0.0"
+# date-released, doi and repository-code: fill in at the time of the Zenodo release
+authors:
+  - family-names: "Baumann-Pickering"
+    given-names: "Simone"
+    # add co-authors (and ORCIDs) as in the manuscript
