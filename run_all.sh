@@ -1,6 +1,8 @@
 #!/bin/bash
 # Reproduce every model, table and figure.
 #   CCE1_DATA_DIR / CCE1_RESULTS_DIR override the default data/ and results/ folders.
+# The scattering-layer file MSL_night_seedWalk.csv is part of the data deposit; to
+# regenerate it, run matlab/run_MSL_seedwalk.m in MATLAB before this script.
 set -e
 cd "$(dirname "$0")/R"
 
