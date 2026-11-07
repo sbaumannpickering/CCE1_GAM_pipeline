@@ -21,13 +21,13 @@ two_part <- c(BmB = "count", BmD = "count", Bp40Hz = "hours", Mn = "minutes",
               Pm = "minutes", Zc = "minutes")
 occurrence_only <- c("Gg")
 single_model <- c(Bp20Hz = "gaussian", UO = "auto", Kspp = "auto", Lo = "auto",
-                  Mc = "auto", Mp = "auto", Ms = "auto", Oo = "auto")
+                  Mc = "auto", Mg = "auto", Ms = "auto", Oo = "auto")
 
 species_name <- c(BmB = "Blue whale B calls", BmD = "Blue whale D calls",
                   Bp20Hz = "Fin whale 20 Hz calls", Bp40Hz = "Fin whale 40 Hz calls",
                   Mn = "Humpback whale", Gg = "Risso's dolphin", Kspp = "Kogia spp.",
                   Lo = "Pacific white-sided dolphin", Mc = "Hubbs' beaked whale",
-                  Mp = "Ginkgo-toothed beaked whale", Ms = "Stejneger's beaked whale",
+                  Mg = "Ginkgo-toothed beaked whale", Ms = "Stejneger's beaked whale",
                   Oo = "Killer whale", Pm = "Sperm whale", UO = "Common dolphin",
                   Zc = "Goose-beaked whale")
 pos_unit <- c(count = "calls/day", hours = "hours with calls", minutes = "minutes with calls")

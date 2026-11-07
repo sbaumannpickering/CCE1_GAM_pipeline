@@ -14,14 +14,12 @@ dir.create(OUTPUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 daily <- load_cce1_daily()
 # extract depth_ctd BEFORE merging: merge() drops custom data.frame
-# attributes, so attr(daily, "depth_ctd") would silently become NULL after
-# the merge below -- and paste0("S", NULL) returns "S" unchanged rather
-# than an empty result, so this bug doesn't error, it just quietly screens
-# a bare "S"/"T"/etc candidate instead of the 8 depth-expanded ones (caught
-# by noticing only 9 candidates were screened instead of the expected ~37)
+# attributes, so attr(daily, "depth_ctd") would be NULL after the merge below,
+# and paste0("S", NULL) returns "S" rather than an empty result (the model
+# would screen a bare "S"/"T"/etc candidate instead of the 8 depth-expanded ones)
 depth_ctd <- attr(daily, "depth_ctd")
 candidates_physical <- c(
-  "Chl40", "DO500", "FSLE", "NO3",   # Chl20 excluded (untrusted data)
+  "Chl40", "DO500", "FSLE", "NO3",
   paste0("S", depth_ctd), paste0("SAnom", depth_ctd),
   paste0("T", depth_ctd), paste0("TAnom", depth_ctd)
 )
@@ -59,8 +57,7 @@ summarize_result <- function(nm, r, elapsed_min) {
 run_and_save <- function(label, y, candidates, data) {
   model_path <- file.path(OUTPUT_DIR, paste0(label, "_model.rds"))
   summary_path <- file.path(OUTPUT_DIR, paste0(label, "_summary.rds"))
-  # always refit (no skip-if-cached), like 03c -- a cached result silently
-  # survives pipeline changes otherwise
+  # always refit (no skip-if-cached) so results reflect the current code and data
   message(sprintf("\n########## %s ##########", label))
   t0 <- Sys.time()
   res <- tryCatch(

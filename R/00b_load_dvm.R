@@ -1,39 +1,37 @@
-# DVM (diel vertical migration) amplitude from the raw hourly WBAT export.
+# DVM (diel vertical migration) amplitude from the hourly WBAT export.
 #
-# Source: CCE1_SB_01_all.mat. NASC.All is hourly backscatter in 12 fine bins
-# binned by RANGE FROM THE UPWARD-LOOKING TRANSDUCER (~504 m), not by depth, so
-# column order is inverted relative to true depth (true depth ~ 504 - range).
-# Averaging each raw column by calendar day reproduces NASC.perDay in
-# combined_diel_daily.mat (median relative difference 0, 385/386 days), which
-# fixes the mapping:
+# Source: CCE1_WBAT_hourly.mat. NASC.All is hourly backscatter in 12 bins of 50 m.
+# The file is ordered SURFACE-FIRST, like CCE1_WBAT_HARP_daily.mat: column 1 is
+# the shallowest bin and `depth` gives each bin's top and bottom in m below the
+# surface (the transducer is upward-looking at ~504 m). Averaging each column by calendar day reproduces
+# NASC.perDay in CCE1_WBAT_HARP_daily.mat (median relative difference ~1e-16),
+# which fixes the mapping:
 #
-#   NASC bin (code)  raw column  depth bin (m)
-#   NASC5               11          0-50
-#   NASC55              10          50-100
-#   NASC155              8          150-200
-#   NASC255              6          250-300
-#   NASC355              4          350-400
-#   NASC455              2          450-500
+#   NASC bin (code)  column  depth bin (m)
+#   NASC5               2       0-50
+#   NASC55              3       50-100
+#   NASC155             5       150-200
+#   NASC255             7       250-300
+#   NASC355             9       350-400
+#   NASC455            11       450-500
 #
-# Column 1 (range -45 to 5 m) is transducer ringdown at ~504 m and column 12
-# (range 505-555 m) is the sea-surface reflection; both are excluded. The
-# response codes (5, 55, ..., 455) are internal identifiers; display labels
-# use the depth bins above.
+# Column 1 (-50 to 0 m) is the sea-surface reflection and column 12 (500-550 m)
+# is transducer ringdown; both are excluded. The response codes (5, 55, ...,
+# 455) are internal identifiers; display labels use the depth bins above.
 #
 # DVM is computed at native hourly resolution and aggregated into
 # day-mean/night-mean using the sunrise/sunset windows (day/night matrices)
-# stored in combined_diel_daily.mat. `validate` reproduces the NASC.day /
-# NASC.night split from raw columns 3,5,7,9,11; this checks the window logic
-# only, not depth labels.
+# stored in the same file. `validate` reproduces the NASC.day / NASC.night
+# split from columns 2,4,6,8,10 (nominal bin tops 5-405 m, shallow to deep);
+# this checks the window logic only, not depth labels.
 
 source("config.R")
 library(R.matlab)
 
-WBAT_EXPORT_PATH <- WBAT_EXPORT_MAT
 
 # NASC.All column index -> response code (mapping above)
-NASC_ALL_COL_TO_BIN <- c(`11` = "NASC5", `10` = "NASC55", `8` = "NASC155",
-                          `6` = "NASC255", `4` = "NASC355", `2` = "NASC455")
+NASC_ALL_COL_TO_BIN <- c(`2` = "NASC5", `3` = "NASC55", `5` = "NASC155",
+                          `7` = "NASC255", `9` = "NASC355", `11` = "NASC455")
 
 #' day/night-window mean of NASC.All for one depth column, for every day
 #' index in `windows` (a 385x2 matrix of [start,end] MATLAB datenums)
@@ -45,7 +43,7 @@ window_means <- function(hourly_dates, hourly_vals, windows) {
   }, numeric(1))
 }
 
-load_dvm_amplitude <- function(mat_path = WBAT_EXPORT_PATH, validate = TRUE) {
+load_dvm_amplitude <- function(mat_path = HOURLY_MAT, validate = TRUE) {
   m <- readMat(mat_path)
   hourly_dates <- as.numeric(m$dates.All)
   nasc_all <- m$NASC.All
@@ -65,9 +63,9 @@ load_dvm_amplitude <- function(mat_path = WBAT_EXPORT_PATH, validate = TRUE) {
   dates <- matlab2date(day_win[, 1])
 
   if (validate) {
-    # reproduce the OLD 5-bin NASC.day/NASC.night exactly to confirm the
-    # day/night window logic (raw columns only; says nothing about depth labels)
-    old_cols <- c(3, 5, 7, 9, 11)   # NASC.day/NASC.night's 5 columns, in order
+    # reproduce the stored 5-bin NASC.day/NASC.night exactly to confirm the
+    # day/night window logic (columns only; says nothing about depth labels)
+    old_cols <- c(2, 4, 6, 8, 10)   # NASC.day/NASC.night's 5 columns, in order (shallow to deep)
     for (k in seq_along(old_cols)) {
       col <- old_cols[k]
       day_mean <- window_means(hourly_dates, nasc_all[, col], day_win)
@@ -80,7 +78,7 @@ load_dvm_amplitude <- function(mat_path = WBAT_EXPORT_PATH, validate = TRUE) {
       }
     }
     message("DVM validation passed: reproduced existing NASC.day/NASC.night exactly ",
-            "from raw columns 3,5,7,9,11 (window logic only).")
+            "from columns 2,4,6,8,10 (window logic only).")
   }
 
   out <- data.frame(Date = dates)

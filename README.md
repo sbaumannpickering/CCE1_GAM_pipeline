@@ -65,7 +65,7 @@ Outputs go to `results/` (not tracked by git).
 | `05_summary_collages.R` | `model_plots/<response>_collage.pdf` | Figs. 6, 7, S6-S8 |
 | `06_dvm_timeseries_figure.R` | `model_plots/DVM_amplitude_timeseries*.pdf` | Fig. S5 |
 | `07_omp_error_figure.R` | `omp_uncertainty/` | Fig. S2, Table S2 |
-| `08_fig5_watermass_ar1.R` | `fig5_watermass_ar1/` (figure, CSV, Word/PDF table) | Fig. 5, Table S6 (S-C) |
+| `08_watermass_regression.R` | `fig5_watermass_ar1/` (figure, CSV, Word/PDF table) | Fig. 5, Table S6 (S-C) |
 
 `00a`-`00f` are shared helpers (data loading, DVM calculation, plotting, the
 GAM functions, Word-table styling, cetacean model specifications) and
@@ -81,9 +81,9 @@ GAM functions, Word-table styling, cetacean model specifications) and
   Information (negative cross-validated deviance explained; deviance explained
   falling below half or all terms lost without the 3 highest days) were applied
   by hand from `cross_validation.csv` and `top_day_sensitivity.csv`.
-- The MATLAB code that built `combined_diel_daily.mat` and traced the
+- The MATLAB code that built `CCE1_WBAT_HARP_daily.mat` and traced the
   mesopelagic scattering layer is not part of this release. The layer-tracing
-  output used here is provided as `MSL_final_per_night_seedWalk.csv` in the data
+  output used here is provided as `MSL_night_seedWalk.csv` in the data
   deposit.
 
 ## License

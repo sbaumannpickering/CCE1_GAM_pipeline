@@ -31,7 +31,7 @@ dvm <- load_dvm_amplitude(validate = TRUE)
 daily <- merge_dvm_into_daily(daily, dvm)
 
 candidates_physical <- c(
-  "Chl40", "DO500", "FSLE", "NO3",   # Chl20 excluded (untrusted data)
+  "Chl40", "DO500", "FSLE", "NO3",
   paste0("S", depth_ctd), paste0("SAnom", depth_ctd),
   paste0("T", depth_ctd), paste0("TAnom", depth_ctd)
 )
@@ -102,8 +102,7 @@ for (y in nasc_responses) {
 # set per model there; "auto" falls back to pick_family(). Fin whale 20 Hz is
 # Gaussian: it is a continuous call index (20 Hz band energy relative to the
 # surrounding bands), never zero, so Tweedie's zero mass does not apply.
-# The two-part models replace the former calendar-based May-Nov blue whale D
-# model: the when-present part uses the actual detection days instead.
+# The when-present part of each two-part model uses the actual detection days.
 for (i in seq_len(nrow(specs))) {
   sp <- specs[i, ]
   summary_rows[[sp$label]] <- run_and_save(sp$label, sp$label, candidates_cetacean, daily,

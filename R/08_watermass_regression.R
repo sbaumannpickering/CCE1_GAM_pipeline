@@ -7,7 +7,7 @@
 #       150-200 m                   -> 150 m
 #       250-300, 350-400, 450-500 m -> 301 m
 # (2) the mesopelagic scattering layer (MSL) parameters from the edge-tracing
-#     detector (MATLAB seed-and-walk detector; its per-night output MSL_final_per_night_seedWalk.csv is part of the data deposit) --
+#     detector (MATLAB seed-and-walk detector; its per-night output MSL_night_seedWalk.csv is part of the data deposit) --
 #     nightly top edge depth, core depth and S_A of the integrated NASC below the
 #     edge -- against the three fractions at the deepest OMP depth, 301 m.
 #     The raw nightly medians are used (not the persistence-filtered or

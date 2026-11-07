@@ -101,7 +101,7 @@ term_rows <- function(res) {
 }
 
 #' one response's block, all columns pre-formatted as text: per-response
-#' values only on the first term row, as in the original table
+#' values only on the first term row
 response_block <- function(label, display_name, res, with_nonzero) {
   if (is.null(res)) return(NULL)   # fit never attempted/completed -- a real gap, not a null result
   nzi <- nonzero_info(label, res)
@@ -155,7 +155,7 @@ tblA_dvm  <- build_table(dvm_codes, nasc_depth_label(dvm_codes))
 # rows come from 00f_model_specs.R (two parts where defined), grouped by taxon
 taxon_group <- list(baleen = c("BmB", "BmD", "Bp20Hz", "Bp40Hz", "Mn"),
                     delphinids = c("Gg", "Lo", "Oo", "Pm", "UO", "Kspp"),
-                    beaked = c("Zc", "Mc", "Mp", "Ms"))
+                    beaked = c("Zc", "Mc", "Mg", "Ms"))
 group_specs <- function(g) {
   s <- specs[specs$species %in% taxon_group[[g]], ]
   s[order(match(s$species, taxon_group[[g]])), ]

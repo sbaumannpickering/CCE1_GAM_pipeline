@@ -1,5 +1,5 @@
 # Shared Word-table styling for the supplementary tables
-# (04_build_summary_tables.R: Tables S-A/S-B; 08_fig5_watermass_ar1.R:
+# (04_build_summary_tables.R: Tables S-A/S-B; 08_watermass_regression.R:
 # Table S-C), so every table has the same look: landscape page, Times New
 # Roman, booktabs-style rules (heavy top/bottom, light under the header and
 # between response blocks), a shaded bold-italic section row, and a PDF copy

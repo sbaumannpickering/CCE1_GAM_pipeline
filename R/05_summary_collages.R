@@ -7,8 +7,6 @@
 #   - The header reports rho, the AR1 coefficient fitted in
 #     00d_gam_pipeline_functions.R: the data are not binned to remove
 #     autocorrelation.
-#   - No North-South index overlay on the predictor panels (that index is not
-#     part of this pipeline's data; see 00a_load_data.R).
 #   - Cetacean (non-Gaussian) response panels are weekly-summed bar charts
 #     ("cumul./week", as in Fig. 3), because daily detection series are mostly
 #     zero with sparse spikes and read poorly as a line. NASC/backscatter
@@ -165,27 +163,21 @@ weekly_agg <- function(dates, y) {
 
 # Sized for two-column assembly: a bit less than half of an 8.5in page width
 # (and still comfortably under half of A4's 8.27in). GAM panels use a FIXED
-# 2-column grid (matching the original figures' "pairs" layout) for every
-# collage, so every partial-effect panel has identical width regardless of
+# 2-column grid for every collage, so every partial-effect panel has identical width regardless of
 # how many terms a given model has; a 1-term model leaves the second cell of
 # its one row blank rather than stretching its single panel to fill the row.
 # A dedicated thin period-number row sits between the GAM grid and the time
 # series stack so every time series panel (including the response) can use
-# the SAME inner margins and come out the same height -- previously the
-# response panel alone carried extra top margin for the period numbers,
-# making its plotted box shorter than the predictor panels below it even
-# though the allocated row height was identical.
+# the SAME inner margins and come out the same height.
 PAGE_WIDTH_IN <- 4.0
 GAM_NCOL <- 2
-GAM_ROW_IN <- 1.75     # 1.45 plus room below each panel for its x-axis title
+GAM_ROW_IN <- 1.75     # panel height plus room below it for the x-axis title,
                         # given the ~1.4in column width at this page size
-TS_ROW_IN  <- 0.6      # reduced from 0.8 -- time series panels were too tall
+TS_ROW_IN  <- 0.6      # height of each time series panel
 # The bottom-most time series panel carries a much bigger bottom mar (room
-# for the date axis tick labels) than every other row. With all rows given
-# the same allocated height, that extra margin ate into the LAST panel's
-# own plot area, making its data region visibly shorter/"compressed" versus
-# the others even though the row height was identical. Extra height here
-# compensates so the last panel's actual plotting box comes out comparable.
+# for the date axis tick labels) than every other row. That extra margin
+# takes space from the LAST panel's plot area, so extra row height here keeps
+# its plotting box the same size as the others.
 TS_LAST_ROW_IN <- TS_ROW_IN + 0.75
 PERIOD_ROW_IN <- 0.5    # includes a gap above the period numbers for the
                         # x-axis titles of the last row of effect panels
