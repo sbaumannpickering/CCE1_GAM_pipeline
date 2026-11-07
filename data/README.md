@@ -1,7 +1,7 @@
 # Input data
 
 The pipeline reads these files. They are archived in the data deposit
-(**Dryad DOI: to be added**); download them into this folder (or point
+(Zenodo, [10.5281/zenodo.24044208](https://doi.org/10.5281/zenodo.24044208)); download them into this folder (or point
 `CCE1_DATA_DIR` at the download) with this layout:
 
 ```
@@ -25,4 +25,4 @@ data/
                                    input to matlab/run_MSL_seedwalk.m
 ```
 
-Variable names and units for every file are in [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md).
+Variable names and units for every file are in the `README.md` of the data deposit.

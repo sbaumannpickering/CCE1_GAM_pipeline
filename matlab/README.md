@@ -24,7 +24,7 @@ folders, as for the R scripts.
 | `WBAT_export_5m/CCE1_WBAT_01_YYMM.csv` | hourly NASC in 5 m layers, depth in m below the surface |
 | `CCE1_WBAT_hourly.mat`, variable `night_all` | sunset and following sunrise of each of the 386 nights |
 
-Output: `results/MSL/MSL_night_seedWalk.csv` (columns in `data/DATA_DICTIONARY.md`).
+Output: `results/MSL/MSL_night_seedWalk.csv` (columns in the `README.md` of the data deposit).
 Run on the deposited inputs it reproduces the deposited `MSL_night_seedWalk.csv` to within 1e-12.
 
 ## Label the layer edge and score the detector
