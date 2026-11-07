@@ -5,7 +5,6 @@ Oceanography*, in revision): generalized additive models (GAMs) and water-mass r
 oceanography at the California Current Ecosystem mooring CCE1 (Oct 2016 -
 Nov 2017).
 
-- **Code archive (DOI):** to be added (Zenodo release of this repository)
 - **Data archive (DOI):** [10.5281/zenodo.24044208](https://doi.org/10.5281/zenodo.24044208) (Zenodo)
 
 ## Pipeline
