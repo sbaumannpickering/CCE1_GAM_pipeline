@@ -53,7 +53,6 @@ whitened_acf1 <- function(resid, ar_start, rho) {
 }
 
 #' Fit mgcv::bam() from a named list of arguments; returns NULL if the fit fails.
-#'
 #' The arguments are passed with do.call() rather than forwarded through `...`.
 #' bam() evaluates AR.start with substitute(), which fails with
 #' "..N used in an incorrect context, no ... to look in" when the call is built
@@ -77,11 +76,17 @@ pick_family <- function(y, gaussian_ok = FALSE) {
 
 #' fit one bam() with an AR1 correlation structure. rho is a single ACF-based
 #' estimate from a pilot (rho=0) fit's residuals, following the standard
-#' mgcv/itsadug workflow, not an AIC grid search. Each extra bam(rho=...) call
-#' is another chance to hit an mgcv discrete-AR1 PIRLS non-convergence hang at
-#' certain rho values, which R-level timeouts cannot interrupt (setTimeLimit
-#' cannot stop a hang inside compiled code). Two bam() calls per model (pilot
-#' plus one rho fit) keep that exposure low.
+#' mgcv/itsadug workflow -- NOT an AIC-grid search. A grid/optimize-based
+#' search was tried first and gave marginally better (~2 AIC point) rho
+#' precision, but every additional bam(rho=...) call is an additional chance
+#' to hit a specific mgcv discrete-AR1 PIRLS non-convergence pathology that
+#' was reproduced directly (Zc ~ s(Chl20) hangs for 10+ minutes at certain
+#' rho values, including non-grid values found by optimize(), while fitting
+#' in <1s at others) and is not interruptible by R-level timeouts
+#' (setTimeLimit cannot stop a hang inside compiled/blocking code). Two
+#' bam() calls per model (pilot + one rho fit) instead of up to ten cuts
+#' exposure to that pathology by roughly 80% and was judged a better
+#' trade-off than chasing it with subprocess-level timeouts.
 #' AR.start is derived from this formula's own complete-case dates, so a
 #' handful of scattered predictor NAs correctly break the AR1 chain instead
 #' of silently splicing non-adjacent days together.
@@ -179,7 +184,8 @@ screen_univariate <- function(y_name, candidates, data, family,
     )
     rm(fit); gc(verbose = FALSE)   # bam() fit objects are large; force collection
                                     # each iteration -- repeated fits in one long
-                                    # R session can stall (likely GC pressure)
+                                    # R session were observed to stall (likely GC
+                                    # pressure) without this
   }
   out <- dplyr::bind_rows(rows)
   # ranked by AIC, or by p-value for PQL (binary) models, which have no AIC
@@ -210,10 +216,11 @@ prune_concurvity <- function(y_name, candidates, screen_tbl, data, family,
                      error = function(e) NULL)
     if (is.null(fit)) { keep <- keep[-length(keep)]; next }  # drop last on failure, retry
     cm <- concurvity(fit$model, full = FALSE)$worst
-    # strip "s(" / ")" around each smooth's single variable name (a bare s(X)
-    # has no comma, so a comma-anchored strip would leave a trailing ")" and no
-    # label would match `keep`, so drop_var would be empty and the pruning
-    # loop would never shrink `keep`)
+    # strip "s(" / ")" around each smooth's single variable name (NOT just
+    # labels with a comma -- a bare s(X) has no comma, so a comma-anchored
+    # strip silently leaves a trailing ")" and every match against `keep`
+    # fails, which previously caused drop_var to resolve to character(0)
+    # and the pruning loop to never shrink `keep` -- an infinite loop)
     labs <- sub("^s\\(", "", rownames(cm))
     labs <- sub("\\)$", "", labs)
     labs <- sub(",.*$", "", labs)           # defensive: handles multi-arg smooths too
@@ -354,9 +361,9 @@ auto_gam_AR1 <- function(y_name, candidates, data, family = NULL,
   # cap the candidate set relative to the response's effective (non-zero)
   # sample size before concurvity pruning. Fitting many smooth terms at once
   # against very few informative observations (e.g. Kspp: 14 non-zero days
-  # of 386) is statistically unjustified and can trigger an mgcv PIRLS
-  # non-convergence hang in the combined-term pruning fit, deterministically,
-  # independent of system resources. screen_tbl is
+  # of 386) is statistically unjustified AND was found to reproducibly
+  # trigger an mgcv PIRLS non-convergence hang in the combined-term pruning
+  # fit, deterministically, independent of system resources. screen_tbl is
   # already AIC-sorted, so this keeps the strongest candidates.
   # informative = non-zero days for counts/Tweedie; for a Gaussian response
   # (which can be negative) every observed day; for occurrence (binary), the

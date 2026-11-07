@@ -1,9 +1,9 @@
 # DVM (diel vertical migration) amplitude from the hourly WBAT export.
 #
 # Source: CCE1_WBAT_hourly.mat. NASC.All is hourly backscatter in 12 bins of 50 m.
-# The file is ordered SURFACE-FIRST, like CCE1_WBAT_HARP_daily.mat: column 1 is
-# the shallowest bin and `depth` gives each bin's top and bottom in m below the
-# surface (the transducer is upward-looking at ~504 m). Averaging each column by calendar day reproduces
+# The deposited file is ordered SURFACE-FIRST, like CCE1_WBAT_HARP_daily.mat:
+# column 1 is the shallowest bin and `depth` gives each bin's top and bottom in
+# m below the surface (the transducer is upward-looking at ~504 m). Averaging each column by calendar day reproduces
 # NASC.perDay in CCE1_WBAT_HARP_daily.mat (median relative difference ~1e-16),
 # which fixes the mapping:
 #
