@@ -1,7 +1,6 @@
 # CCE1 automated AR1 GAM pipeline
 
-R and Matlab code for the statistical analysis (and MATLAB code for the scattering-layer tracing) in Baumann-Pickering et al. (*Limnology and
-Oceanography*, in revision): generalized additive models (GAMs) and water-mass regressions with AR1 errors relating active acoustic backscatter (NASC), diel vertical migration (DVM) amplitude and cetacean acoustic occurrence/calling to water-column
+R and Matlab code for the statistical analysis (and MATLAB code for the scattering-layer tracing) in the manuscript "Water-mass variability synchronizes predator–prey dynamics from surface waters to the deep ocean": generalized additive models (GAMs) and water-mass regressions with AR1 errors relating active acoustic backscatter (NASC), diel vertical migration (DVM) amplitude and cetacean acoustic occurrence/calling to water-column
 oceanography at the California Current Ecosystem mooring CCE1 (Oct 2016 -
 Nov 2017).
 
